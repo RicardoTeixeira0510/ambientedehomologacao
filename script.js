@@ -358,21 +358,21 @@
             tbody.innerHTML = html;
 
             // Eventos dos botões
-            document.querySelectorAll('.btn-aprovar').forEach(btn => {
+            tbody.querySelectorAll('.btn-aprovar').forEach(btn => {
                 btn.addEventListener('click', (e) => {
                     const idx = parseInt(btn.dataset.idx);
                     setStatus(idx, 'Aprovado', '');
                 });
             });
 
-            document.querySelectorAll('.btn-negar').forEach(btn => {
+            tbody.querySelectorAll('.btn-negar').forEach(btn => {
                 btn.addEventListener('click', (e) => {
                     const idx = parseInt(btn.dataset.idx);
                     abrirModalData(idx);
                 });
             });
 
-            document.querySelectorAll('.btn-analise').forEach(btn => {
+            tbody.querySelectorAll('.btn-analise').forEach(btn => {
                 btn.addEventListener('click', (e) => {
                     const idx = parseInt(btn.dataset.idx);
                     setStatus(idx, 'Em análise', proximoDiaUtil());
@@ -380,7 +380,7 @@
             });
 
             // Observação modal
-            document.querySelectorAll('.btn-pequeno').forEach(btn => {
+            tbody.querySelectorAll('.btn-pequeno').forEach(btn => {
                 btn.addEventListener('click', (e) => {
                     const idx = parseInt(btn.dataset.idx);
                     const reg = registros.find(r => r.id === idx);
@@ -392,7 +392,7 @@
             });
 
             // Checkbox de cada linha (seleção para ações em massa)
-            document.querySelectorAll('.row-checkbox').forEach(chk => {
+            tbody.querySelectorAll('.row-checkbox').forEach(chk => {
                 chk.addEventListener('change', (e) => {
                     const idx = parseInt(chk.dataset.idx);
                     if (chk.checked) {
