@@ -412,14 +412,12 @@
         // checkboxes "selecionar todos" (desktop e mobile) com base nos registros
         // atualmente visíveis na tabela
         function atualizarBarraSelecao() {
-            bulkCount.textContent = selecionados.size;
-            bulkBar.classList.toggle('active', selecionados.size > 0);
+            if (bulkCount) bulkCount.textContent = selecionados.size;
+            if (bulkBar) bulkBar.classList.toggle('active', selecionados.size > 0);
 
             if (ultimosFiltrados.length === 0) {
-                selecionarTodosCheckbox.checked = false;
-                selecionarTodosCheckbox.indeterminate = false;
-                selecionarTodosMobileCheckbox.checked = false;
-                selecionarTodosMobileCheckbox.indeterminate = false;
+                setCheckboxState(selecionarTodosCheckbox, false, false);
+                setCheckboxState(selecionarTodosMobileCheckbox, false, false);
                 return;
             }
             const idsVisiveis = ultimosFiltrados.map(r => r.id);
@@ -427,10 +425,16 @@
             const todosSelecionados = qtdSelecionadosVisiveis === idsVisiveis.length;
             const algunsSelecionados = qtdSelecionadosVisiveis > 0 && qtdSelecionadosVisiveis < idsVisiveis.length;
 
-            selecionarTodosCheckbox.checked = todosSelecionados;
-            selecionarTodosCheckbox.indeterminate = algunsSelecionados;
-            selecionarTodosMobileCheckbox.checked = todosSelecionados;
-            selecionarTodosMobileCheckbox.indeterminate = algunsSelecionados;
+            setCheckboxState(selecionarTodosCheckbox, todosSelecionados, algunsSelecionados);
+            setCheckboxState(selecionarTodosMobileCheckbox, todosSelecionados, algunsSelecionados);
+        }
+
+        // Atualiza checked/indeterminate de um checkbox só se ele realmente existir no
+        // HTML (protege contra páginas com cache desatualizado/mesclando versões antigas)
+        function setCheckboxState(checkbox, checked, indeterminate) {
+            if (!checkbox) return;
+            checkbox.checked = checked;
+            checkbox.indeterminate = indeterminate;
         }
 
         // Abrir modal de data - aceita um único id ou uma lista de ids (ação em massa)
@@ -886,33 +890,45 @@
             renderTable();
         }
 
-        selecionarTodosCheckbox.addEventListener('change', function() {
-            alternarSelecionarTodos(selecionarTodosCheckbox.checked);
-        });
+        if (selecionarTodosCheckbox) {
+            selecionarTodosCheckbox.addEventListener('change', function() {
+                alternarSelecionarTodos(selecionarTodosCheckbox.checked);
+            });
+        }
 
-        selecionarTodosMobileCheckbox.addEventListener('change', function() {
-            alternarSelecionarTodos(selecionarTodosMobileCheckbox.checked);
-        });
+        if (selecionarTodosMobileCheckbox) {
+            selecionarTodosMobileCheckbox.addEventListener('change', function() {
+                alternarSelecionarTodos(selecionarTodosMobileCheckbox.checked);
+            });
+        }
 
-        bulkLimpar.addEventListener('click', function() {
-            selecionados.clear();
-            renderTable();
-        });
+        if (bulkLimpar) {
+            bulkLimpar.addEventListener('click', function() {
+                selecionados.clear();
+                renderTable();
+            });
+        }
 
-        bulkAprovar.addEventListener('click', function() {
-            if (selecionados.size === 0) return;
-            setStatus(Array.from(selecionados), 'Aprovado', '');
-        });
+        if (bulkAprovar) {
+            bulkAprovar.addEventListener('click', function() {
+                if (selecionados.size === 0) return;
+                setStatus(Array.from(selecionados), 'Aprovado', '');
+            });
+        }
 
-        bulkAnalise.addEventListener('click', function() {
-            if (selecionados.size === 0) return;
-            setStatus(Array.from(selecionados), 'Em análise', proximoDiaUtil());
-        });
+        if (bulkAnalise) {
+            bulkAnalise.addEventListener('click', function() {
+                if (selecionados.size === 0) return;
+                setStatus(Array.from(selecionados), 'Em análise', proximoDiaUtil());
+            });
+        }
 
-        bulkNegar.addEventListener('click', function() {
-            if (selecionados.size === 0) return;
-            abrirModalData(Array.from(selecionados));
-        });
+        if (bulkNegar) {
+            bulkNegar.addEventListener('click', function() {
+                if (selecionados.size === 0) return;
+                abrirModalData(Array.from(selecionados));
+            });
+        }
 
         // Inicialização vazia
         // Nenhum dado de exemplo
