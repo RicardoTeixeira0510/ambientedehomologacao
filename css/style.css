@@ -221,6 +221,9 @@
             cursor: pointer;
             accent-color: #1d4b77;
         }
+        .mobile-select-all {
+            display: none;
+        }
         .filters {
             display: flex;
             flex-wrap: wrap;
@@ -729,6 +732,45 @@
             .bulk-actions button {
                 flex: 1 1 auto;
                 justify-content: center;
+            }
+
+            /* "Selecionar todos" fica visível no mobile (o cabeçalho da tabela some) */
+            .mobile-select-all {
+                display: flex;
+                align-items: center;
+                margin: 2px 0 14px;
+            }
+            .mobile-select-all label {
+                display: flex;
+                align-items: center;
+                gap: 10px;
+                font-size: 13px;
+                font-weight: 600;
+                color: #3e5e7a;
+                background: #f0f5fe;
+                border: 1px solid #d6e2ef;
+                border-radius: 40px;
+                padding: 8px 16px;
+                cursor: pointer;
+            }
+            .mobile-select-all input {
+                width: 18px;
+                height: 18px;
+                cursor: pointer;
+                accent-color: #1d4b77;
+            }
+
+            /* Checkbox de cada linha: no card mobile ele não deve ficar espremido
+               na largura fixa pensada pro desktop (34px), e o alvo de toque fica maior */
+            td.td-checkbox {
+                width: auto;
+                text-align: right;
+                padding-left: 0;
+                padding-right: 0;
+            }
+            td.td-checkbox input {
+                width: 22px;
+                height: 22px;
             }
 
             /* Tabela vira lista de cartões, sem precisar rolar de lado */

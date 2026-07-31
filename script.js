@@ -20,6 +20,7 @@
         let abaAtual = 'Pendente'; // guia ativa: Pendente, Em análise, Aprovado, Negado ou '' (Todos)
 
         const selecionarTodosCheckbox = document.getElementById('selecionarTodos');
+        const selecionarTodosMobileCheckbox = document.getElementById('selecionarTodosMobile');
         const bulkBar = document.getElementById('bulkBar');
         const bulkCount = document.getElementById('bulkCount');
         const bulkAprovar = document.getElementById('bulkAprovar');
@@ -407,8 +408,9 @@
             atualizarBarraSelecao();
         }
 
-        // Atualiza a barra de ações em massa (contador, visibilidade) e o estado do
-        // checkbox "selecionar todos" com base nos registros atualmente visíveis na tabela
+        // Atualiza a barra de ações em massa (contador, visibilidade) e o estado dos
+        // checkboxes "selecionar todos" (desktop e mobile) com base nos registros
+        // atualmente visíveis na tabela
         function atualizarBarraSelecao() {
             bulkCount.textContent = selecionados.size;
             bulkBar.classList.toggle('active', selecionados.size > 0);
@@ -416,12 +418,19 @@
             if (ultimosFiltrados.length === 0) {
                 selecionarTodosCheckbox.checked = false;
                 selecionarTodosCheckbox.indeterminate = false;
+                selecionarTodosMobileCheckbox.checked = false;
+                selecionarTodosMobileCheckbox.indeterminate = false;
                 return;
             }
             const idsVisiveis = ultimosFiltrados.map(r => r.id);
             const qtdSelecionadosVisiveis = idsVisiveis.filter(id => selecionados.has(id)).length;
-            selecionarTodosCheckbox.checked = qtdSelecionadosVisiveis === idsVisiveis.length;
-            selecionarTodosCheckbox.indeterminate = qtdSelecionadosVisiveis > 0 && qtdSelecionadosVisiveis < idsVisiveis.length;
+            const todosSelecionados = qtdSelecionadosVisiveis === idsVisiveis.length;
+            const algunsSelecionados = qtdSelecionadosVisiveis > 0 && qtdSelecionadosVisiveis < idsVisiveis.length;
+
+            selecionarTodosCheckbox.checked = todosSelecionados;
+            selecionarTodosCheckbox.indeterminate = algunsSelecionados;
+            selecionarTodosMobileCheckbox.checked = todosSelecionados;
+            selecionarTodosMobileCheckbox.indeterminate = algunsSelecionados;
         }
 
         // Abrir modal de data - aceita um único id ou uma lista de ids (ação em massa)
@@ -866,14 +875,23 @@
 
         // ----- Seleção em massa -----
 
-        // Checkbox do cabeçalho: marca/desmarca todos os itens atualmente visíveis (aba + filtros)
-        selecionarTodosCheckbox.addEventListener('change', function() {
-            if (selecionarTodosCheckbox.checked) {
+        // Checkbox "selecionar todos" (desktop, no cabeçalho da tabela, e mobile, na
+        // barra acima da tabela): marca/desmarca todos os itens atualmente visíveis
+        function alternarSelecionarTodos(marcar) {
+            if (marcar) {
                 ultimosFiltrados.forEach(r => selecionados.add(r.id));
             } else {
                 ultimosFiltrados.forEach(r => selecionados.delete(r.id));
             }
             renderTable();
+        }
+
+        selecionarTodosCheckbox.addEventListener('change', function() {
+            alternarSelecionarTodos(selecionarTodosCheckbox.checked);
+        });
+
+        selecionarTodosMobileCheckbox.addEventListener('change', function() {
+            alternarSelecionarTodos(selecionarTodosMobileCheckbox.checked);
         });
 
         bulkLimpar.addEventListener('click', function() {
