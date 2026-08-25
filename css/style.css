@@ -231,7 +231,7 @@
             margin: 10px 0 22px;
             align-items: center;
         }
-        .filters input, .filters select {
+        .filters input:not([type="checkbox"]), .filters select {
             padding: 8px 16px;
             border-radius: 40px;
             border: 1px solid #d6e2ef;
@@ -349,8 +349,9 @@
             gap: 2px;
         }
         .filtro-opcao {
-            display: flex;
-            align-items: flex-start;
+            display: grid;
+            grid-template-columns: 16px 1fr auto;
+            align-items: start;
             gap: 10px;
             padding: 7px 6px;
             border-radius: 8px;
@@ -364,13 +365,14 @@
         .filtro-opcao input {
             width: 16px;
             height: 16px;
+            max-width: 16px;
+            min-width: 16px;
             cursor: pointer;
             accent-color: #1d4b77;
             flex-shrink: 0;
             margin-top: 2px;
         }
         .filtro-opcao .filtro-opcao-texto {
-            flex: 1 1 0%;
             min-width: 0;
             overflow: hidden;
             white-space: normal;
