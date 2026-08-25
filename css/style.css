@@ -370,11 +370,12 @@
             margin-top: 2px;
         }
         .filtro-opcao .filtro-opcao-texto {
-            flex: 1;
+            flex: 1 1 0%;
             min-width: 0;
-            overflow: visible;
+            overflow: hidden;
             white-space: normal;
-            word-break: break-word;
+            overflow-wrap: break-word;
+            word-break: normal;
             line-height: 1.35;
         }
         .filtro-opcao .filtro-opcao-count {
